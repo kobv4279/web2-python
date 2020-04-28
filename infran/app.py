@@ -1,3 +1,5 @@
+import time
+
 from flask import Flask, render_template, request
 import requests
 from bs4 import BeautifulSoup
@@ -55,12 +57,78 @@ def result():
 
 
 
-@app.route('/naver_shopping')
+@app.route('/naver_shopping', methods=['POST'])
 def naver_shopping():
 
-    driver = webdriver.Chrome('/chromedriver')
+    search_list =[]
+    search_list_src =[]
+
+
+    search = request.form['input3']
+    driver = webdriver.Chrome()
     driver.implicitly_wait(3)
-    driver.get()
+    driver.get("https://search.shopping.naver.com/search/all.nhn?query="+search+"&cat_id=&frm=NVSHATC")
+
+
+#스크롤 내려서 사진 불러오기
+    y = 1000
+    for timer in range(1,10):
+        driver.execute_script("window.scrollTo(0," + str(y)+ ")")
+        y= y+1000
+        time.sleep(1)
+
+
+    soup = BeautifulSoup(driver.page_source,"html.parser")
+
+    for i in soup.select("#_search_list > div.search_list.basis > ul > li"):
+        print(i.find("a", class_="link").text)
+
+        search_list.append(i.find("a", class_="link").text)
+        search_list_src.append(i.find("img", class_="_productLazyImg")['src'])
+
+    print("_0___핫딜   -0-0-0-0-0--0-0-0-0-0-0-0-")
+
+
+    driver.find_element_by_class_name("snb_hotdeal").click()
+
+    # 스크롤 내려서 사진 불러오기
+    y = 1000
+    for timer in range(1, 10):
+        driver.execute_script("window.scrollTo(0," + str(y) + ")")
+        y = y + 1000
+        time.sleep(1)
+
+
+    soup = BeautifulSoup(driver.page_source,"html.parser")
+
+    for i in soup.select("#_search_list > div.search_list.basis > ul > li"):
+        print(i.find("a",class_="link").text)
+        search_list.append(i.find("a", class_="link").text)
+        search_list_src.append(i.find("img", class_="_productLazyImg")['src'])
+
+    print("----0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-해외직구")
+
+    driver.find_element_by_class_name("snb_overseas").click()
+
+    # 스크롤 내려서 사진 불러오기
+    y = 1000
+    for timer in range(1, 10):
+        driver.execute_script("window.scrollTo(0," + str(y) + ")")
+        y = y + 1000
+        time.sleep(1)
+
+
+    soup = BeautifulSoup(driver.page_source, "html.parser")
+
+    for i in soup.select("#_search_list > div.search_list.basis > ul > li"):
+        print(i.find("a", class_="link").text)
+        search_list.append(i.find("a", class_="link").text)
+        search_list_src.append(i.find("img", class_="_productLazyImg")['src'])
+    driver.close()
+
+    return render_template("shopping.html", search_list=search_list,
+                           search_list_src=search_list_src,
+                           len= len(search_list_src))
 
 if __name__ == '__main__':
     app.debug = True
