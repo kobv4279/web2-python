@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>chonbook.html</title>
+    <a href="/about">어바웃페이지로 이</a>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/index_style_css.css')}}">
+</head>
+<body>
+<h1>
+    교사임용공고알림페이지
+</h1>
+<p>
+    this page is for {{title}}
+    모든 수험생 파이팅!!
+</p>
+
+<div class="kj_content">
+    <h1>여기는 전라북도 교사임용공고 크롤링 페이지입니다
+    </h1>
+    <ul>
+    {% for i in sub%}
+    <li>
+        {{i}}
+    </li>
+    {% endfor %}
+    </ul>
+</div>
+
+<<<<<<< b6db801a6cf881532722b8387adf81e8c09f9596
+<form action = "http://0.0.0.0:5000/kf" method = "POST">
+
+         <p><input type = "submit" value = "광주" /></p>
+      </form>
+<form action = "http://0.0.0.0:5000/cn" method = "POST">
+=======
+<form action = "http://localhost:5000/kj" method = "POST">
+
+         <p><input type = "submit" value = "광주" /></p>
+      </form>
+<form action = "http://localhost:5000/cn" method = "POST">
+>>>>>>> Add files via upload
+
+         <p><input type = "submit" value = "전남" /></p>
+      </form>
+</body>
+</html>
+

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<<<<<<< b6db801a6cf881532722b8387adf81e8c09f9596
+</head>
+<body>
+<h2>광주광역시 임용공고</h2>
+<h5>
+    {{sub}}
+
+</h5>
+<h6>
+    {{ref}}
+</h6>
+
+=======
+
+    <link rel="stylesheet" href="{{url_for('static',filename='css/index_style_css.css')}}">
+</head>
+<body>
+<h2>광주광역시 임용 공고</h2>
+
+<div class="kj_content">
+    <h1>여기는 광주광역시 교사임용공고 크롤링 페이지입니다
+    </h1>
+    <ul>
+    {% for i in sub%}
+    <li>
+        {{i}}
+    </li>
+    {% endfor %}
+    </ul>
+</div>
+
+<form action = "http://localhost:5000/kj" method = "POST">
+
+         <p><input type = "submit" value = "광주" /></p>
+      </form>
+<form action = "http://localhost:5000/cn" method = "POST">
+    <p><input type="submit" value ="전라남도 "></p>
+</form>
+
+<form action="http://localhost:5000/chonbook.html" method = "POST">
+    <p><input type="submit" value="전라북도"></p>
+>>>>>>> Add files via upload
+</body>
+</html>

@@ -36,9 +36,14 @@ print('''<!DOCTYPE html>
     <h1><a href="index.py">광주광역시 교사임용공고 크롤링 페이지입니다
     </h1>
     <ol>
-      <li><a href="index.py?id=kwangu">광주</a></li>
-      <li><a href="index.py?id=chonnam.html">전남</a></li>
+     {listStr}
     </ol>
+    <a href="create.py">create</a>
+    <p><input type="text" name="title" placeholder="title"></p>
+    <p><textarea rows="4" name="description"
+    placeholder="description"></textarea></p>
+    <p><input type="submit"></p>
+
 
 </body>
 </html>'''.format(title=pageId, desc=description, listStr=listStr))
