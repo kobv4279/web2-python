@@ -124,7 +124,7 @@ def naver_shopping():
         print(i.find("a", class_="link").text)
         search_list.append(i.find("a", class_="link").text)
         search_list_src.append(i.find("img", class_="_productLazyImg")['src'])
-    driver.close()
+    #driver.close()
 
     return render_template("shopping.html", search_list=search_list,
                            search_list_src=search_list_src,
