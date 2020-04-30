@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title> </title>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>컬럼1</td>
+            <td>컬럼2</td>
+        </tr>
+    </table>
+    <p style="color:red">p테그는 문단전체가 바뀜 글자색을 바꿔봅시다 </p>
+    <p>글짜 style ="속성: 값 "</p>   
+    <span>span태그는 그앞에 까지만 글자의 크기는 </span>
+    <style>
+         p{color:blue; background-color: yellow; font-size: 25pt;}
+         .redfont {color:aqua;}
+         .bgyellow{background-color: yellowgreen;}
+         .size25 {font-size: 25pt;}
+         a:link {color: black}
+         a:visited {color: green; text-decoration: none;}
+         a:hover {color: red; text-decoration: none;}
+         a:active {color: blue; text-decoration: none;}
+    </style>
+    <p class="redfont"> 따로 p태그에 class=redfont</p>
+    <p class="bgyellow">p class="bgyellow {background-color:}</p>
+
+    <a class="size25" href="https://www.inflearn.com" target="_blank">인프런링크 </a>
+
+    <form action="/login" method="POST">
+        <input type="text" name="email" placeholder="입력" required/>
+        <input type="password" name="password" />
+
+        <input type="radio" name="country" value="korea">korea
+        <input type="radio" name="country" value="english">english
+        <input type="radio" name="country" value="china">china
+
+        <input type="checkbox" name="lect" value="python">파이썬
+        <input type="checkbox" name="lect" value="c/c++">c/c++
+        <input type="checkbox" name="lect" value="java">java
+        <input type="checkbox" name="lect" value="android">android
+
+        <input type="file" name="upload_file" accept="image/*">
+
+
+        <p>select의 데이터는 옵션에는 네임을 주지않고 옵션을 꼭줘야 셀렉는옵션을 꼭줘야함</p>
+        <select name="lect2" id="">
+            <option value="python">python</option>
+        </select> 
+        <br>
+        <p>textarea라는 테그는 텍스트를 다중으로 입력할 수있는 박스 </p>
+        <textarea name="contents" id="" cols="70" rows="4" placeholder="내용을 써주세요"></textarea>
+        </br>   
+        <input type="submit" value="전송하기">    
+        <p>input은 이 전체 form을 전송한다는 버튼</p>
+
+    </form>
+  
+
+</body>
+</html>

@@ -40,10 +40,7 @@ print('''<!DOCTYPE html>
     </ol>
     <a href="create.py">create</a>
     <p><input type="text" name="title" placeholder="title"></p>
-    <p><textarea rows="4" name="description"
-    placeholder="description"></textarea></p>
-    <p><input type="submit"></p>
-
+    
 
 </body>
 </html>'''.format(title=pageId, desc=description, listStr=listStr))
