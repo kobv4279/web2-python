@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.5.0.slim.js"></script>
+<script>
+     function mouseOver(o){
+         o.style.color = "yellow";
+         o.style.backgroundColor = "blue";
+         o.style.cursor ="ppinter";
+     }
+     function mouseOut(o){
+         o.style.color = "";
+         o.style.backgroundColor="";
+         o.style.cursor="";
+     }
+
+</script>     
+
+
+
+
+<p onmouseover="mouseOver(this);" onmouseout="mouseOut(this);">마우스포인터를 올려보세요
+    
+</p>
+<div>
+    <p>this라는것은 테그 자체를 의미해서 이 태그 자체를 넘겨서 
+        mouseOver(), mouseOut() 함수를 호출하게됨
+    </p>
+</div>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+
+<form id="joinForm" action="">
+
+    <label for="name">이름</label><input type="text" id="name"><br>
+    <label for="email">email</label><input type="text" id="email"><br>
+    <input type="submit" value="회원가입" name="" id="">        
+        
+</form>
+
+<script>
+
+    var f = document.getElementById("joinForm");
+    f.addEventListener("submit", function(e){
+        if(f.name.value.length == 0){
+            alert("이름입력하세요");
+            e.preventDefault();
+
+        }
+        if(f.email.value.length == 0){
+            alert("이메일을 입력하세요");
+            e.preventDefault();
+            f.email.focus();
+
+            return;
+
+        }
+    });
+</script>

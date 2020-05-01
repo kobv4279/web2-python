@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.5.0.slim.js"></script>
+
+<div id="container" class="cclass"></div>
+
+<script>
+    document.getElementById("container");
+    document.getElementsByClassName("cclass");
+
+    $("#container");    
+    $(".cclass");
+
+</script>
+    
+
+<p>jquery예제</p>
+<input type="button" onclick="test()" value="test()">
+<input id="btn" type="button" onclick="test()" value="바로구현">
+<script>
+
+$("#btn").on("click", function test(evt){
+    $("p").css("color","yellowgreen").css("font-size","25px");
+})
+
+
+
+function test(){
+        $("p").css("color","red");
+    }
+    /*   
+    test라는 함수 호출 되고 test는 css적용함 
+    $("#---")  id로 접근하는 방식
+    $(". _____") class 로 접근
+    $("p")  p테그 전체를 의미함 
+    */
+
+
+
+</script>
+
+
+</body>
+</html>

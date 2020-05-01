@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    img:hover{
+        -webkit-filter: blur(5px);
+        filter: blur(5px);
+    }
+</style>
+
+<body>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.js"></script>
+
+<p onclick="change(this)">onclick이벤트발생시 this를 argment로 넘김</p>  
+
+<script>
+    function change(elem){
+        elem.innerHTHML = "원인이 무엇인가";
+    }
+</script>
+
+<img src="KKam.jpg" width="200">
+<br>
+<textarea onkeyup="keyup(this);" name="" id="" cols="30" rows="10"></textarea>
+남은글자: <span id="r">100</span>
+
+<br>
+
+<input type="text" id="name" value="이름입력" placeholder="이름입력">
+
+<script>   
+
+var n = document.getElementById("name");
+n.addEventListener("focus", function(e){
+    if(n.value == "이름을 입력하세요"){
+        n.value ="";
+
+    }
+});
+
+n.addEventListener("blur", function(e){
+    if(n.value == ""){
+        n.value = "이름을 입력하세요";
+    }
+});
+
+ 
+
+
+</script>
+
+
+<script>
+
+    function kyup(elem){
+        var l = elem.value.length;
+        var remain = 100 - l;
+        document.getElementsByClassName("r").innerHTML = remain;
+
+    }
+</script>
+
+
+</body>
+</html>

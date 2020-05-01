@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.js"></script>
+
+
+<form action="" name="join">
+    비밀번호 : <input type="pw" id="pw1">
+    비밀번호 확인 : <input type="pw" id="pw2">
+    <input type="button" value="회원가입"onclick="test()">
+
+</form>
+    
+<script>
+    function test(){
+        var p1 = $("#pw1").val();
+        var p2 = $("#pw2").val();
+
+        if(p1 != p2){
+            alert("비밀번호 다름");
+            return flase;
+        }else {
+            alert("비밀번호일치");
+            return true;
+        }
+
+    }
+
+</script>
+</body>
+</html>

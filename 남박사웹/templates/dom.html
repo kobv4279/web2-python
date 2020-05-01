@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.5.0.slim.js"></script>
+    
+<script type="text/javascript">
+    function c(){
+        var result = document.getElementById("result")
+        var elem = document.getElementById("python")
+        result.innerHTML = elem.constructor.name;
+
+    }
+function d(){
+    var result = document.getElementById("result");
+    var elem = document.getElementsByTagName("li");
+    result.innerHTML = elem.constructor.name;
+
+}
+
+function e(){
+    var result = document.getElementsById("result");
+    var elem = document.getElementsByClassName("cname");
+    result.innerHTML = elem.constructor.name;
+
+}
+</script>
+<div id="result">
+
+</div>
+
+
+<li id="python">파이썬 li테그 이고 button클릭하면 c() 함수 구현</li>
+<li> c함수가 구현되면 result라는 id를 가진 element를 구해서 result에 넣어서 html사이에 넣겠다 </li>
+<li>html에 어떤걸 넣으냐 elem.constructor.name; 생성자 이름 을 넣겠다 그게 HTMLLIElement이다</li>
+
+<input type="button" onclick="c()" value="c함수">
+
+<input type="button" onclick="d()" value="d함수">
+<input type="button" onclick="e()" value="e함수">
+</body>
+</html>
+
+

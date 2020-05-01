@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>javascript</title>
+</head>
+<body>
+
+<input type="button" value="클릭" id="btn">    
+<script type="text/javascript">
+    var btn = document.getElementById("btn");
+    btn.addEventListener("click", function(){
+        alert("안녕");
+    });
+
+    function test(){
+        console.log("그냥 함수 선언 :test funtion call");
+    }
+
+    var test = function(){
+        console.log("var test = 다른방식으로 동작");
+    }
+
+</script>
+<p>
+    browser object model BOM
+    document object model : DOM
+    -
+    객체화 property
+    
+</p>
+
+
+<br>
+<input type="button" value="클릭 인라인" onclick="alert('안녕')">
+<p>인라인방식 onclick 어떤 이벤트를 바로 직접 사용할 수있다 </p>
+<p>간단한 내용은 인라인방법</p>
+</br>
+
+
+</body>
+</html>
