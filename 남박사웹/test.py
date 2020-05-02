@@ -1,8 +1,8 @@
 import sqlite3
 
-conn = sqlite3.connect("test.db")  #연결되어있는 db자체
+conn = sqlite3.connect("test.db")  
 
-cur = conn.cursor()   #cur 는 소통할수 있는 커서객체
+cur = conn.cursor()   
 
 query = """
     CREATE TABLE IF NOT EXISTS board(
@@ -14,3 +14,15 @@ query = """
 """
 
 cur.execute(query)
+
+
+query = "INSERT INTO board (writer, title, contents) VALUES ('Lee','sub','con') "
+qurey ="SELECT writer, title,contents FROM board"
+cur.execute(query)
+conn.commit()
+# rows = cur.fetchall()S
+# for row in rows:
+#     print(row)
+
+
+conn.close()
