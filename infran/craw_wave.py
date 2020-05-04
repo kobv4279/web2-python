@@ -4,8 +4,9 @@ from bs4 import BeautifulSoup
 import datetime
 import selenium
 from selenium import webdriver
-import image
-#https://www.weather.go.kr/mini/marine/wavemodel_c.jsp?prefix=kim_cww3_%5BAREA%5D_wdpr_&area=jeju&tm=2020.04.28.09&ftm=s000&newTm=2020.04.28.09&x=4&y=10
+#import image
+# https://www.weather.go.kr/mini/marine/wavemodel_c.jsp?prefix=kim_cww3_%5BAREA%5D_wdpr_&area=jeju&tm=2020.04.28.09
+# &ftm=s000&newTm=2020.04.28.09&x=4&y=10
 
 
 a = input("날짜")
@@ -26,6 +27,6 @@ for i in soup.select("#chart_image"):
 
 
 
-
-image = image.open(src)
-image.show()
+#
+# image = image.open(src)
+# image.show()
