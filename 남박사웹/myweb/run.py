@@ -41,14 +41,40 @@ def lists():
     # 페이지값 값이 없는 경우 기본값은 1
     page = request.args.get("page", default=1, type=int)
     # 한페이지당 몇개의 게시물을 룰력할지
-    limit = request.args.get("limit", 10, type=int)
+    limit = request.args.get("limit", 7, type=int)
+
+
+    search = request.args.get("search", -1, type=int)
+    keyword = request.args.get("keyword", type=str)
+    
+    # 최종적 완성된 쿼리를 만들 변수 -딕셔너리형태변수
+    query = {}
+    # 검색어 상태를 추가할 리스트 변수
+    search_list = []
+
+    if search == 0:    #제목
+        search_list.append({"title": {"$regex": keyword}})   #제목에"녕"이 있는지 안녕하세요를 검색하기위해 $regex연산자를 사용
+    elif search == 1:
+        search_list.append({"contents": {"$regex": keyword}})
+    elif search == 2:
+        search_list.append({"title": {"$regex": keyword}})
+        search_list.append({"contents": {"$regex": keyword}})
+    elif search == 3:
+        search_list.append({"name": {"$regex": keyword}})
+
+    # 검색 대상이 한개라도 존재할 경우 query 변수에 $or 리스트를 query합니다 
+    if len(search_list) > 0 :
+        query = {"$or": search_list}
+
+    print(query)
+
 
     board = mongo.db.board
-    datas = board.find({}).skip((page - 1) * limit).limit(limit)
+    datas = board.find(query).skip((page - 1) * limit).limit(limit)
     #limit디폴트값이 10개니까 앞 10개 없애고 10개로 제한 
     
     # 게시물의 총 갯수
-    tot_count = board.find({}).count()
+    tot_count = board.find(query).count()
     # 마지막페이지수를 구함
     last_page_num = math.ceil(tot_count / limit)
     # 게시물이 한개라도 있으면 페이지가 존재하므로 계산후 나머지가 있으면 무조건 올림해야함 math.ceil
@@ -69,7 +95,9 @@ def lists():
         page=page,
         block_start=block_start,
         block_last=block_last,
-        last_page_num=last_page_num)
+        last_page_num=last_page_num,
+        search=search,
+        keyword=keyword)
         # 왼쪽은 변수명 = 오른쪽은 값
 
 @app.route("/view/<idx>")

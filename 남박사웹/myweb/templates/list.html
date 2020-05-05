@@ -1,3 +1,17 @@
+<script>
+    function search(){
+        var v_search = document.getElementById("search").value;
+        var v_keyword = document.getElementById("keyword").value;
+    
+        if(v_search == "" || v_keyword == "" ){
+            return false;
+        }else{
+            self.location.href="{{url_for('lists')}}?search="+v_search+"&keyword="+v_keyword;
+        }
+    }
+
+</script>
+
 {% if datas.count() > 0 %}
 <table>
     <thead>
@@ -14,8 +28,8 @@
         <!-- 반복되는 구간-->
         {% for data in datas %}
         <tr>
-            <td>{{loop.index}}</td>
-            <td><a href="{{url_for('board_view', idx=data._id)}}">{{data.title}}</a></td>
+            <td>{{loop.index + ((page - 1) * limit)}}</td>
+            <td><a href="{{url_for('board_view', idx=data._id, page=page, search=search, keyword=keyword)}}">{{data.title}}</a></td>
             <td>{{data.name}}</td>
             <td>{{data.pubdate |formatdatetime}}</td>
             <td>{{data.view}}</td>
@@ -36,15 +50,26 @@
         {% if i == page %}
             <b>{{ i }}</b>
         {% else %}
-            <a href="{{url_for('lists', page=i)}}">{{ i }}</a>
+            <a href="{{url_for('lists', page=i, search=search, keyword=keyword)}}">{{ i }}</a>
             <!--url_for의 lists함수의 page걊의i가현재 page값이 되기떄문에 그게 파라미터이기때문에 -->
         {% endif %}
     {% endif %}
 {% endfor %}
 
 {% if block_last < last_page_num %}
-    <a href="{{url_for('lists', page=block_last +1)}}">[다음]</a>
+    <a href="{{url_for('lists', page=block_last +1, search=search, keyword=keyword)}}">[다음]</a>
 {% endif%}
+
+<select name="search" id="search">
+    <option value="">검색대상</option>
+    <option value="0">제목</option>
+    <option value="1">내용</option>
+    <option value="2">제목+내용</option>
+    <option value="3">작성자</option>
+</select>
+<input type="text" name="keyword" id="keyword">
+<input type="button" value="검색" onclick="search()">
+
 
 {% else %}
 <h3>데이터가 없습니다</h3>

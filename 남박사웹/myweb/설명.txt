@@ -28,3 +28,38 @@ def lists():
 
 
 
+block start 1페이지 block last 5 페이지 블럭사이즈는 5까지만 
+실제데이터의 갯수는 4페이지까지 없는 경우 
+
+
+
+
+<select name="search" id="search">
+    <option value="">검색대상</option>
+    <option value="0">제목</option>
+    <option value="1">내용</option>
+    <option value="2">제목+내용</option>
+    <option value="3">작성자</option>
+</select>
+<input type="text" name="keyword" id="keyword">
+<input type="button" value="검색" onclick="search()">
+
+
+<script>
+    function search(){
+        var v_search = document.getElementById("search").value;
+        var v_keyword = document.getElementById("keyword").value;
+    
+        if(v_search == "" || v_keyword == "" ){
+            return false;
+        }else{
+            self.location.href="{{url_for('lists')}}?search="+v_search+"&keyword="+v_keyword;
+        }
+    }
+
+</script>
+
+
+사용자가 onclick하면 search()함수가 수행
+값과 키워드 값을 v_keyword에 담아서 존재하면 브라우저에 링크를
+lists함수가 가르치큰ㄴ url_fo로 파라미터를 넘겨서 
