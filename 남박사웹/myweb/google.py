@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 from datetime import datetime
-
+import random
 
 client = MongoClient(host="localhost",port=27017)
 db = client.myweb

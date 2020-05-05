@@ -1,0 +1,30 @@
+#pegination
+#페이지번호를 구현하는 방법 
+
+pageblock-
+
+라이브러리가 있지만 사용하지않고 직접 구현함 
+
+----페이지 설정전에---------
+
+@app.route("/list")
+def lists():
+    #페이지값 값이 없는 경우 기본값은 1
+    page = request.args.get("page", default=1, type=int)
+    #한페이지당 몇개의 게시물을 룰력할지
+    limit = request.args.get("limit", 10, type=int)
+
+    #게시물의 총 갯수
+    tot_count = 
+
+
+    board = mongo.db.board
+    datas = board.find({}).skip((page - 1) * limit).limit(limit)
+    #limit디폴트값이 10개니까 앞 10개 없애고 10개로 제한 
+    return render_template("list.html", datas = datas)
+
+
+-----------------페이지 설정후------------------
+
+
+

@@ -1,3 +1,6 @@
+#conda activate DoctorNam 
+# python 3.6.9 64bit('kobv4':virtualenv)
+
 from flask import Flask
 from flask import request
 from flask import render_template
@@ -8,6 +11,7 @@ from flask import abort
 from flask import redirect
 from flask import url_for
 import time 
+import math
 
 
 #flask_pymongo는 접속될 주소를 app.config로 선언해준다
@@ -30,6 +34,43 @@ def format_datetime(value):
     #현재 타임기준으로 datetime 객체 만듬
     value = datetime.fromtimestamp((int(value) / 1000)) + offset
     return value.strftime('%Y-%m-%d %H:%M:%S')
+
+
+@app.route("/list")
+def lists():
+    # 페이지값 값이 없는 경우 기본값은 1
+    page = request.args.get("page", default=1, type=int)
+    # 한페이지당 몇개의 게시물을 룰력할지
+    limit = request.args.get("limit", 10, type=int)
+
+    board = mongo.db.board
+    datas = board.find({}).skip((page - 1) * limit).limit(limit)
+    #limit디폴트값이 10개니까 앞 10개 없애고 10개로 제한 
+    
+    # 게시물의 총 갯수
+    tot_count = board.find({}).count()
+    # 마지막페이지수를 구함
+    last_page_num = math.ceil(tot_count / limit)
+    # 게시물이 한개라도 있으면 페이지가 존재하므로 계산후 나머지가 있으면 무조건 올림해야함 math.ceil
+ 
+    # 페이지 블럭을 5개씩 표기
+    block_size = 5
+    # 현재 블럭의 위치 
+    block_num = int((page - 1) / block_size)
+    # 블럭의 시작 위치
+    block_start = (int(block_size * block_num) + 1)
+    # 블럭의 끝 위치
+    block_last = math.ceil(block_start + (block_size - 1))
+ 
+    return render_template(
+        "list.html", 
+        datas=datas,
+        limit=limit,
+        page=page,
+        block_start=block_start,
+        block_last=block_last,
+        last_page_num=last_page_num)
+        # 왼쪽은 변수명 = 오른쪽은 값
 
 @app.route("/view/<idx>")
 def board_view(idx):
