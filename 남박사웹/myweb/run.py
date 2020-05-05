@@ -105,6 +105,10 @@ def board_view(idx):
     #idx = request.args.get("idx")
     #idx는 몽고디비의 id값이다 이것을 get방식으로 바다서
     if idx is not None:
+        page = request.args.get("page")
+        search = request.args.get("search")
+        keyword = request.args.get("keyword")
+
         board = mongo.db.board
         data = board.find_one({"_id":ObjectId(idx)})    #id값이 idx인것을 찾아서 data에 넣겠다
 
@@ -118,7 +122,12 @@ def board_view(idx):
                 "view":data.get("view")
             }
             #이 데이타를 html로 표기해주어야 한다 
-            return render_template("view.html",result=result)
+            return render_template(
+                "view.html",
+                result=result,
+                page=page,
+                search=search,
+                keyword=keyword)
 
     return abort(404)
 
