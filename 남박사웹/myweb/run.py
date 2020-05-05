@@ -6,10 +6,13 @@ from flask import request
 from flask import render_template
 from flask_pymongo import PyMongo
 from datetime import datetime
+from datetime import timedelta
 from bson.objectid import ObjectId
 from flask import abort
 from flask import redirect
 from flask import url_for
+from flask import flash
+from flask import session
 import time 
 import math
 
@@ -20,6 +23,8 @@ import math
 
 app = Flask(__name__)
 app.config["MONGO_URI"]= "mongodb://localhost:27017/myweb"
+app.config["SECRET_KEY"] = "abcd"
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
 mongo = PyMongo(app)
 
 #utc 시간을 현재 시간에 맞게 구현하기
@@ -161,6 +166,77 @@ def board_write():
         return redirect(url_for("board_view", idx= x.inserted_id))
     else: 
         return render_template("write.html")
+
+
+@app.route("/join", methods=["GET","POST"])
+def member_join():
+    if request.method == "POST":
+        name = request.form.get("name", type=str)
+        email = request.form.get("email", type=str)
+        pass1 = request.form.get("pass", type=str)
+        pass2 = request.form.get("pass2", type=str)
+
+        if name == "" or email == "" or pass1 == "" or pass2 == "":
+            flash("입력되지 않은값이 있습니다")
+            return render_template("join.html")
+
+        if pass1 != pass2:
+            flash("비밀번호가 일치하지 않습니다. ")
+            return render_template("join.html")
+
+        members = mongo.db.members    
+        cnt = members.find({"email":email}).count() 
+        if cnt > 0:
+            flash("중복된 이메일 주소입니다")
+            return render_template("join.html")
+
+        current_utc_time = round(datetime.utcnow().timestamp()*1000)
+        post = {
+            "name": name,
+            "email": email,
+            "pass": pass1,
+            "joindate": current_utc_time,
+            "logintime": "",
+            "logincount": 0,
+        }
+        members.insert_one(post)
+
+        return ""
+    else:
+        return render_template("join.html")
+
+
+@app.route("/login", methods=["GET","POST"])
+def member_login():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("pass")
+
+        members = mongo.db.members
+        data = members.find_one({"email": email})
+
+        if data is None:
+            flash("회원정보가 없습니다")
+            return redirect(url_for("member_login"))
+# 다시 member_login함수호출하고 get으로 넘어가니까 다시login.html창이 열림
+        else:
+            if data.get("pass") == password:
+                session["email"] = email
+                session["name"] = data.get("name")
+                session["id"] = str(data.get("_id"))
+                session.permanent = True
+                return redirect(url_for("lists"))
+
+            else:
+                flash("비밀번호가 일치하지 않습니다")
+                return redirect(url_for("member_login"))
+
+
+        return ""
+    else:
+        return render_template("login.html")
+
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True, port=9000)
