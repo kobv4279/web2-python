@@ -1,0 +1,17 @@
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <script>
+            alert("{{ messages[-1] }}");
+        </script>
+    {% endif %}
+{% endwith %}
+
+{{result.title}}
+<br>
+{{result.name}}
+<br>
+{{result.pubdate|formatdatetime}}
+<br>
+{{result.contents}}
+<br>
+<a href="{{url_for('lists', page=page, search=search, keyword=keyword)}}">리스트</a>

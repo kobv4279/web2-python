@@ -1,0 +1,30 @@
+<html>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <script>
+            alert("{{messages[-1]}}")
+        </script>  
+    {% endif %}
+{% endwith %}
+
+
+{{result.title}}
+<br>
+{{result.name}}
+<br>
+{{result.pubdate|formatdatetime}}
+<br>
+{{result.view}}
+<br>
+{{result.contents}}
+
+<br>
+<a href="{{url_for('lists', page=page,search=search,keyword=keyword)}}">리스트</a>
+ 
+
+<!--만약에 글작성 아이디가 session아이디와 같으면 글수정 삭제 항목을 보이게-->
+{% if session["id"] == result.writer_id %}
+<a href="{{url_for('board_delete', idx=result.id)}}">글삭제</a>
+<a href="{{url_for('board_edit', idx=result.id)}}">글수정</a>
+{% endif %}
+</html>
