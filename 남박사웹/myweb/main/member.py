@@ -43,7 +43,7 @@ def member_join():
         }
         members.insert_one(post)
 
-        return ""
+        return redirect(url_for("board.lists"))
     else:
         return render_template("join.html",title="회원가입")
 
@@ -53,7 +53,7 @@ def member_login():
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("pass")
-        next_url = request.form.get("next_url")
+        next_url = request.form.get("next_url", type=str)
 
 
         members = mongo.db.members

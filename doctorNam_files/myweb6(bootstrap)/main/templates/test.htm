@@ -1,0 +1,31 @@
+%%html
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<input type="button" id="btnJS" value="JS 테스트버튼">
+<input type="button" id="btnJQ" value="JQ 테스트버튼">
+
+<input type="button" id="btnStyleJS" value="자바스크립트 스타일변경">
+<input type="button" id="btnStyleJQ" value="jQeury 스타일변경">
+
+<span id="txt">스타일을 변경해봅니다.</span>
+
+<script>
+
+document.getElementById("btnStyleJS").addEventListener("click", function(evt) {
+    document.getElementById("txt").style.color = "red";
+    document.getElementById("txt").style.fontSize = "20px";
+});
+
+$("#btnStyleJQ").on("click", function(evt) {
+    $("#txt").css("color", "red").css("font-size", "20px");
+})
+// Javascript
+document.getElementById("btnJS").addEventListener("click", function(evt) {
+    alert("[자바스크립트] 버튼이 클릭되었습니다.");
+});
+
+// jQuery
+$("#btnJQ").on("click", function(evt) {
+    alert("[jQuery] 버튼이 클릭되었습니다.")
+})
+</script>

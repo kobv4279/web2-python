@@ -1,6 +1,25 @@
+<!--edit.html-->
+
 {% extends "main.html" %}
 
 {% block contents %}
+
+
+<form method="POST" name="form" action="{{url_for('board.board_edit', idx=data._id)}}">
+    <div class="form-group">
+        <label for="name">작성자</label>
+        <input class="form-control" type="text" name="name" value="{{session['name']}}" readonly>
+    </div>
+    <div class="form-group">
+        <label for="title">제목</label>
+        <input class="form-control" type="text" name="title" value={{data.title}}>
+    </div>
+    <div class="form-group">
+        <label for="contents">내용</label>
+        <input class="form-control" type="text" name="name" value="{{session['name']}}" readonly>
+    </div>
+
+
 <table>
     <form method="POST" name="form" action="{{url_for('board.board_edit', idx=data._id)}}">
 

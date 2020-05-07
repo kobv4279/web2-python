@@ -28,6 +28,16 @@ app.config["SECRET_KEY"] = "abcd"
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
 mongo = PyMongo(app)
 
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args,**kwargs):
+        if session.get("id") is None or session.get("id") == "":
+            return redirect(url_for("member.member_login", next_url=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 # utc 시간을 현재 시간에 맞게 구현하기 
 @app.template_filter("formatdatetime")
 def format_datetime(value):
