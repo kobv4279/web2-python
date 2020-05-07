@@ -3,6 +3,9 @@
 # python 3.6.9 64bit('kobv4':virtualenv)
 
 
+from main import app, datetime, time
+
+
 # utc 시간을 현재 시간에 맞게 구현하기 
 @app.template_filter("formatdatetime")
 def format_datetime(value):

@@ -1,0 +1,203 @@
+#####플라스크 탬플릿 상속 기능으로 HTML파일 구조화하기
+
+
+
+
+
+
+
+
+#####플라스크 프로젝트를 모듈화 하여 패키징하기 
+
+
+package폴더
+    main :모든 프로젝트는 main에 귀속됨--package가 됨 
+    |
+    |_   __init.py 파일을 추가: 모든 import , 환경변수, mongo디비초기화
+    |
+    |______board.py
+    |
+    |______member.py
+    |
+    |______common.py
+    |
+    |______filter.py
+    |
+    |______templates>----html파일들
+    |
+    |
+_____run.py  : run.py는 main 밖에 있다 
+    
+
+
+#
+blueprint = Blueprint("board", __name__, url_prefix="/board")
+
+이 블루프린트의 이름은 board이고 
+/board/를 앞에 붙여서 접속해야함
+
+
+ctrl +F 찾기
+
+
+
+
+from flask import Flask
+from flask import request
+from flask import render_template
+from flask_pymongo import PyMongo
+from datetime import datetime
+from datetime import timedelta
+from bson.objectid import ObjectId
+from flask import abort
+from flask import redirect
+from flask import url_for
+from flask import flash
+from flask import session
+from functools import wraps
+import time 
+import math
+
+
+#flask_pymongo는 접속될 주소를 app.config로 선언해준다
+#몽고디비에 접속될주소 db이름까지 반드시 설정할것
+#mongo라는 인스턴스에 PyMongo에 app을 넘겨줌
+
+app = Flask(__name__)
+app.config["MONGO_URI"]= "mongodb://localhost:27017/myweb"
+app.config["SECRET_KEY"] = "abcd"
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(minutes=30)
+mongo = PyMongo(app)
+
+
+
+#이 패키지에 귀속이 되게 함 board와 memeber를 가져오는 방법 
+from .common import login_required
+from .filter import format_datetime
+from . import board
+from . import member
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#pegination
+#페이지번호를 구현하는 방법 
+
+pageblock-
+
+라이브러리가 있지만 사용하지않고 직접 구현함 
+
+----페이지 설정전에---------
+
+@app.route("/list")
+def lists():
+    #페이지값 값이 없는 경우 기본값은 1
+    page = request.args.get("page", default=1, type=int)
+    #한페이지당 몇개의 게시물을 룰력할지
+    limit = request.args.get("limit", 10, type=int)
+
+    #게시물의 총 갯수
+    tot_count = 
+
+
+    board = mongo.db.board
+    datas = board.find({}).skip((page - 1) * limit).limit(limit)
+    #limit디폴트값이 10개니까 앞 10개 없애고 10개로 제한 
+    return render_template("list.html", datas = datas)
+
+
+-----------------페이지 설정후------------------
+
+
+
+block start 1페이지 block last 5 페이지 블럭사이즈는 5까지만 
+실제데이터의 갯수는 4페이지까지 없는 경우 
+
+
+
+
+<select name="search" id="search">
+    <option value="">검색대상</option>
+    <option value="0">제목</option>
+    <option value="1">내용</option>
+    <option value="2">제목+내용</option>
+    <option value="3">작성자</option>
+</select>
+<input type="text" name="keyword" id="keyword">
+<input type="button" value="검색" onclick="search()">
+
+
+<script>
+    function search(){
+        var v_search = document.getElementById("search").value;
+        var v_keyword = document.getElementById("keyword").value;
+    
+        if(v_search == "" || v_keyword == "" ){
+            return false;
+        }else{
+            self.location.href="{{url_for('lists')}}?search="+v_search+"&keyword="+v_keyword;
+        }
+    }
+
+</script>
+
+
+사용자가 onclick하면 search()함수가 수행
+값과 키워드 값을 v_keyword에 담아서 존재하면 브라우저에 링크를
+lists함수가 가르치큰ㄴ url_fo로 파라미터를 넘겨서 
+
+
+
+
+네트워크 프로그램은
+서버와 클라이언트 프로그램은
+
+웹서버는 
+클라이언트가 요청하면 서버는 정보를 제공하고 접속을 종료함
+그러므로 클라이언트를 특정할수 없음
+그러므로 클라이언트를 특정할수있게하는 게 
+쿠키와 세션인데
+
+쿠키는 어떤데이터를 클라이언트에 저장 - 덜 안정적 -보안에 취약 -암호화취약
+세션은 서버에 저장 
+
+
+
+
+@@decorater@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+def login_required(f):
+    @wrap(f)
+    def decorated_function(*args,**kwargs):
+        if session.get("id") is None or session.get("id") == "":
+            return redirect(url_for("member_login", next_url=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
+127.0.0.1 - - [06/May/2020 18:19:35] "?[37mGET /view/5eb27ea9da30cc26802e37bf?page=8&search=-1 HTTP/1.1?[0m" 200 -
+127.0.0.1 - - [06/May/2020 18:19:38] "?[32mGET /edit/5eb27ea9da30cc26802e37bf HTTP/1.1?[0m" 302 -
+다이렉션이 수행되었을 때 메서드 (그리고 몸체) 가 변경되어서는 안된다고 명시했지만, 모든 사용자 에이전트들이 이를 따르는 것은 아니다 - 이러한 종류의 버그가 있는 소프트웨어를 쉽게 찾아볼 수도 있다. 따라서, 리다이렉트할 때에도 메서드 변경이 되지 않는 307 Temporary Redirect 을 대신 사용하고고 GET 또는 HEAD 요청에 대한 응답으로는 302 코드를 설정하는 것이 권장된다.
+메서드가 GET 으로 변경되도록 하고 싶은 경우에는, 303 See Other 를 대신 사용하라. 이 응답 코드는 PUT 을 통해 리소스를 업로드하고 나서 업로드된 리소스 대신 '성공적으로 XYZ'를 업로드했습니다' 와 같은 메시지를 보여주는 응답을 할 때 유용하다.
+Status

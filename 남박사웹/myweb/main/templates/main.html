@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>{{title}}</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.js"></script>
+ 
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script>
+                alert("{{messages[-1]}}")
+            </script>  
+        {% endif %}
+    {% endwith %}
+</head>
+<body>
+    {% include "menu.html" %}
+    {% block contents %}
+    {% endblock %}
+</body>
+</html>

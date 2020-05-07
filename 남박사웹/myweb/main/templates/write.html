@@ -1,16 +1,13 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form action="/write" method="POST" name="form">
-    <table>
+{% extends "main.html" %}
+
+{% block contents %}
+
+<table>
+    <form action="{{url_for('board.board_write')}}" method="POST" name="form">
+
         <tr>
             <td>작성자</td>
-            <td><input type="text" name="name"></td>
+            <td><input type="text" name="name" value="{{session['name']}}" readonly></td>
         </tr>
         <tr>
             <td>제목</td>
@@ -24,7 +21,6 @@
             <td colspan="2"><input type="submit"></td>
         </tr>
     </form>
-    </table>
-    
-</body>
-</html>
+</table>
+
+{% endblock %}

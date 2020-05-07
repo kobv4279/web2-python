@@ -1,0 +1,21 @@
+<script>
+    function checkForm(){
+        if($.trim($("#email").val() == ""){  
+            alert("이메일을 입력하세요");
+            $("#email").focus();
+            return false;
+        }
+        if($("#pass").val() == ""){
+            alert("비밀번호를 입력하세요")
+            $("#pass").focus();
+            return false;    
+        }
+        return true;
+    }
+
+
+$.trim 으로 감싸면 공백을 제거해준다
+
+email.을 검증하는 정규식 문법
+ 
+var pattern = /정규식 문법/;
