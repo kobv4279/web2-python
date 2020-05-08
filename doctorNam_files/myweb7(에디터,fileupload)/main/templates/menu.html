@@ -1,0 +1,7 @@
+<div class="text-right">
+{% if session["id"] is not none or session["id"] != "" %}
+<a href="{{url_for('member.member_logout')}}">로그아웃</a>
+{% else %}
+<a href="{{url_for('member.member_login')}}">로그인</a>
+{% endif %}
+</div>

@@ -7,7 +7,19 @@ from functools import wraps
 from main import session, redirect, request, url_for, ALLOWED_EXTENSIONS
 from string import digits, ascii_lowercase, ascii_uppercase
 import random
+import re
+import os
 
+
+# 파일네임을 secure로 변환해주는 함수 구현
+def check_filename(filename):
+    reg = re.compile(r'[^A-Za-z0-9_.가-힝-]')
+    for sep in os.path.sep, os.path.altsep:
+        if sep:
+            filename = filename.replace(sep, ' ')
+            print(filename)
+            filename = str(reg.sub('', '_'.join(filename.split()))).strip('._')
+    return filename
 
 
 #확장자를 체크하는 함수

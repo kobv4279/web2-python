@@ -31,11 +31,16 @@ mongo = PyMongo(app)
 
 
 #플라스크에서 이미지 업로드 구현
+#이미지를 보관할 path를 설정
 
 BOARD_IMAGE_PATH = "G:\\images"
+BOARD_ATTACH_FILE_PATH = "G:\\uploads"
 ALLOWED_EXTENSIONS = set(["txt", "pdf","png","jpg","jpeg","gif"])
 
+
+# 환경변수 설정해줘야 에러가 안난다
 app.config["BOARD_IMAGE_PATH"] = BOARD_IMAGE_PATH    #쉽게접근하기위해 환경변수 설정
+app.config["BOARD_ATTACH_FILE_PATH"] = BOARD_ATTACH_FILE_PATH
 app.config["MAX_CONTENT_LENGTH"] = 15 * 1024 * 1024   #15메가
 
 
@@ -44,10 +49,14 @@ if not os.path.exists(app.config["BOARD_IMAGE_PATH"]):
     os.mkdir(app.config["BOARD_IMAGE_PATH"])
 
 
+if not os.path.exists(app.config["BOARD_ATTACH_FILE_PATH"]):
+    os.mkdir(app.config["BOARD_ATTACH_FILE_PATH"])
 
 
+
+# import를해줘야 다른데서 파일을 쓸수 있다
 #이 패키지에 귀속이 되게 함 board와 memeber를 가져오는 방법 
-from .common import login_required, allowed_file, rand_generator
+from .common import login_required, allowed_file, rand_generator, check_filename
 from .filter import format_datetime
 from . import board
 from . import member

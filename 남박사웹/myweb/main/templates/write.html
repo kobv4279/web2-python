@@ -37,7 +37,7 @@
             data: data,
             type: "post",
             success: function(url){
-                var image = $("<img>").attr("src", url).css('max-width',"900px");
+                var image = $("<img>").attr("src", url).css('max-width',"700px");
                 $("#summernote").summernote("insertNode", image[0]);
 
             },
@@ -68,7 +68,7 @@
 </script>
 
 <form action="{{url_for('board.board_write')}}"
-method="POST" name="form" onsubmit="return checkForm()">
+method="POST" name="form" onsubmit="return checkForm()" enctype="multipart/form-data">
     <div class="form-group">
         <label for="name">작성자</label>
         <input class="form-control" id="name" type="text" name="name" value="{{session['name']}}" readonly>
@@ -84,7 +84,15 @@ method="POST" name="form" onsubmit="return checkForm()">
 
         </textarea>  
 </div>
-    <div class="text-center"><input class="btn btn-primary" type="submit" value="작성하기"></div>
+    <div class="custom-file">
+        <input class="custom-file-input" id="customFIle" type="file" name="attachfile">
+        <label class="custom-file-label" for="customFile">파일선택</label>
+    </div>
+    
+    <div class="text-center">
+        <input class="btn btn-primary" type="submit" value="작성하기"></div>
+       
+</form>
 
 
 {% endblock %}

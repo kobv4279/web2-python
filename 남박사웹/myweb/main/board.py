@@ -11,6 +11,14 @@ from flask import send_from_directory
 blueprint = Blueprint("board", __name__, url_prefix="/board")
 
 
+def board_delete_attach_file(filename):
+    abs_path = os.path.join(app.config["BOARD_ATTACH_FILE_PATH"], filename)
+    if os.path.exists(abs_path):
+        os.remove(abs_path)
+        return True
+    return False
+
+
 @blueprint.route("/upload_image", methods=["POST"])
 def upload_image():
     if request.method == "POST":
@@ -28,6 +36,11 @@ def board_images(filename):
     return send_from_directory(app.config["BOARD_IMAGE_PATH"], filename)
 # 실제프로젝트 바깥의 폴더에 접근하기 위해서 함수의 인자는 절대경로를 넘겨주고, 파일명을 같이 넘겨주면
 # 그 데이터를 뽑아 리턴해줌
+
+@blueprint.route("/files/<filename>")
+def board_files(filename):
+    return send_from_directory(app.config["BOARD_ATTACH_FILE_PATH"], filename, as_attachment=True)
+
 
 
 @blueprint.route("/list")
@@ -123,7 +136,8 @@ def board_view(idx):
                 "contents": data.get("contents"),
                 "pubdate": data.get("pubdate"),
                 "view": data.get("view"),
-                "writer_id": data.get("writer_id", "")
+                "writer_id": data.get("writer_id", ""),
+                "attachfile": data.get("attachfile","")
             }
 
             # 이 데이타를 html로 표기해주어야 한다 
@@ -145,10 +159,26 @@ def board_view(idx):
 @login_required
 def board_write():
     if request.method == "POST":
+        filename = None
+        if "attachfile" in request.files:   # 첨부파일이 첨부가 됐냐 안됬냐 물어보는것
+            file = request.files["attachfile"]   # 파일을 받아서
+            if file and allowed_file(file.filename): # 원본파일이름이 허용하는 확장자이면
+                filename = check_filename(file.filename)    #원본파일 이름을 넘겨주고 새로운 파일네임 받음
+                file.save(os.path.join(app.config['BOARD_ATTACH_FILE_PATH'], filename))
+        
         name =  request.form.get("name")
         title = request.form.get("title")
         contents = request.form.get("contents")
-        print(name, title, contents)
+        
+
+
+
+# 파일을 접근, 저장하는 코드
+# secure_filename()함수를 이용하게 flask는 추천함
+# 그러므로 secure_filename() 함수를 흉내내서 따로 만듬 common.py
+
+        request.files
+
 
         current_utc_time = round(datetime.utcnow().timestamp()*1000)
         #utc는 ms로 반환하므로 1000을 곱한후 소수점을 없애기위해 반올림 round함수로
@@ -163,6 +193,12 @@ def board_write():
             "writer_id":session.get("id"),  #mongodb회원의id값unique값
             "view":0,
         }
+
+
+        if filename is not None:
+            post["attachfile"] = filename
+
+
 
         x = board.insert_one(post)
         print(x.inserted_id)
@@ -191,18 +227,43 @@ def board_edit(idx=None):
         idx = request.form.get("idx")
         title = request.form.get("title")
         contents = request.form.get("contents")
+        deleteoldfile = request.form.get("deleteoldfile", "")
+ 
+
 
 # 권한이 있는지 확인 
         board = mongo.db.board
-
-
         data = board.find_one({"_id": ObjectId(idx)})
 
-        if session.get("id") == data.get("writer_id"):
+        if session.get("id") == data.get("writer_id"):     # 세션 권한이 확인이 되면 
+            # attach_file = data.get("attachfile")
+            filename = None
+            if "attachfile" in request.files:             # 첨부파일이 새로 등록되었고
+                file = request.files["attachfile"]
+                if file and allowed_file(file.filename):    #파일이 존재하고, 확장자 체크하고
+                    filename = check_filename(file.filename)              #문제없는 파일이름 받고
+                    file.save(os.path.join(app.config["BOARD_ATTACH_FILE_PATH"], filename))
+                    
+
+                    if data.get("attachfile"):    # 첨부파일이 예전에 있다면 
+                        board_delete_attach_file(data.get("attachfile"))    # 기존의 파일을  삭제
+
+
+
+            else:                       # 첨부파일이 새로 등록되지 않았고
+                if deleteoldfile == "on":                   
+                    filename = None
+                    if data.get("attachfile"):
+                        board_delete_attach_file(data.get("attachfile"))
+                else:
+                    filename = data.get("attach_file")
+
+            
             board.update_one({"_id": ObjectId(idx)}, {    # 업데이트될 내용을 명시
                 "$set":{
                     "title": title,
                     "contents": contents,
+                    "attachfile": filename
                 }
             })
             flash("수정되었습니다")
