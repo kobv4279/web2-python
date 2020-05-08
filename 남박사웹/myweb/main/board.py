@@ -5,9 +5,30 @@
 
 from main import *
 from flask import Blueprint
+from flask import send_from_directory
 
                           #모듈이름
 blueprint = Blueprint("board", __name__, url_prefix="/board")
+
+
+@blueprint.route("/upload_image", methods=["POST"])
+def upload_image():
+    if request.method == "POST":
+        file = request.files["image"]     # write.html에서ajax에서 image를 image라는 이름의 데이타러 받아오기떄문에 
+        if file and allowed_file(file.filename):
+            filename = "{}.jpg".format(rand_generator())
+            savefilepath = os.path.join(app.config["BOARD_IMAGE_PATH"], filename)
+            file.save(savefilepath)
+            return url_for("board.board_images", filename=filename)
+
+
+
+@blueprint.route("/images/<filename>")
+def board_images(filename):
+    return send_from_directory(app.config["BOARD_IMAGE_PATH"], filename)
+# 실제프로젝트 바깥의 폴더에 접근하기 위해서 함수의 인자는 절대경로를 넘겨주고, 파일명을 같이 넘겨주면
+# 그 데이터를 뽑아 리턴해줌
+
 
 @blueprint.route("/list")
 def lists(): 

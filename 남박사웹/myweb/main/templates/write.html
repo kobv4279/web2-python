@@ -13,10 +13,43 @@
                 image:[],
                 link:[],
                 air:[],
+            },
+            callbacks: {
+                onImageUpload: function(image){
+                    for(var i=0; i<image.length; i++){
+                        uploadImage(image[i]);
+                    }
+                }
             }
         });
     
     });
+
+
+    function uploadImage(image){
+        var data = new FormData();
+        data.append("image", image);
+        $.ajax({
+            url: "{{url_for('board.upload_image')}}",
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: data,
+            type: "post",
+            success: function(url){
+                var image = $("<img>").attr("src", url).css('max-width',"900px");
+                $("#summernote").summernote("insertNode", image[0]);
+
+            },
+            error: function(data){
+                console.log(data);
+                alert(data);
+            }
+
+        });
+    }
+
+1
 </script>
 
 <script>

@@ -1,5 +1,80 @@
-#####플라스크 프로젝트를 모듈화 하여 패키징하기 
 
+
+
+25강. 글작성 폼에 html 에디터 기능 추가하기
+summernote 폼 추가하기
+
+이미지 이벤트 감지-> 이미지를 서버쪽으로 전송
+서버에서 전송이 완료되면 해당이미지의 주소를 리턴해주면
+주소만 img태그로 
+
+
+<script>
+    $(document).ready(function(){
+        $("#summernote").summernote({
+            heigth:300,
+            minHeight: null,
+            maxHeight: null,
+            lang:"ko-KR",
+            popover:{
+                image:[],
+                link:[],
+                air:[],
+            },---------------------------------사용자가 summernote에 이미지를 첨부하는 순간
+            callbacks: {   --------------------이벤트에 의해 호출되어지는것 
+                onImageUpload: function(img){
+                    for(var i=0; i<image.length; i++){
+                        uploadImage(image[i]); --------서버로 전송하는 기능을 만들어야함
+                    }
+                }
+            }
+        });
+    
+    });
+--------------업로드 이미지 함수는 ajax로 통신해야한다 ㄱ
+------ajax는 이 write.html 페이지에서 페이지 이동ㅇ없이 내부적으로 서버에 전송해야되고 
+전송되면 그 해당경로를 받아와서여기에 다시 표기해야하므로 페이지를 이동하면안되니까 
+ajax를 이용할 것이다 
+
+---------ajax--------------------------------------
+    function uploadImage(image){
+        var data = FormData();   -------------formData객체 생성
+        data.append("image", image);----------
+        $.ajax({-------------------------------------ajax에필요한 모든 내용 기술
+            url: "{{url_for('board.upload_image')}}",
+            cache: false,------------------이데이터를 캐시 데이터로 처리할거냐 말거냐
+ @@@@@@@@   contentType: false,-----------데이터를 전송하는건 일반적인 변수와 값을전송하는 경우와 데이터를 전송하는 경우 두개가 있는데 false멀티파트 폼데이터
+ @@파일전송시에는 꼭 멀티파트 폼 데이터 형태로 contentType을 false로 해야한다@@@@@@@@           
+            
+            
+            processData: false,-------------
+            data: data,
+        변수명 : 값  이값은 이미지라는 이름으로 이미지를 넣어놓은 데이타라는 값이 됨 
+            type: "post",
+@@성공하면   success: function(url){---------------완료가 되면 url리턴해주게 함수
+                var image = $("<img>").attr("src",url).css('max-width',"900px");  최대폭을 강제로 설정
+    -----------이미지가 너무 크면 안되니까 강제함  
+                $("#summernote").summernote("insertNode", image[0]);
+-----섬머노트 함수의 인서트 노드이용해서 객체를 강제적으로 insert시킴 노드에다가 
+폼데이터 객체 생성하고 image라는 이름으로 image객체를 append 
+
+            },
+            error: function(data){
+                console.log(data);
+                alert(data);
+            }
+
+        });
+    }
+
+
+
+
+
+
+
+
+#####플라스크 프로젝트를 모듈화 하여 패키징하기 
 
 
 package폴더
