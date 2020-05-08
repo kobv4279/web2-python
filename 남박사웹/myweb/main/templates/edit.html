@@ -1,43 +1,57 @@
-<!--edit.html-->
-
-{% extends "main.html" %}
+<!-- edit.html -->
+{% extends 'main.html' %}
 
 {% block contents %}
+<link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script>
 
+<script>
+$(document).ready(function() {
+  $('#summernote').summernote({
+        height: 300,
+        minHeight: null,
+        maxHeight: null,
+        lang : 'ko-KR',
+        popover: {
+            image: [],
+            link: [],
+            air: []
+        }
+  });
+});
 
-<form method="POST" name="form" action="{{url_for('board.board_edit', idx=data._id)}}">
+function CheckEditForm() {
+    if($.trim($("#title").val()) == "") {
+        alert("제목을 입력하세요.");
+        $("#title").focus();
+        return false;
+    }
+
+    if($.trim($("#summernote").val()) == "") {
+        alert("내용을 입력하세요.");
+        $("#summernote").focus();
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+<form name="form" method="POST" action="{{url_for('board.board_edit')}}" onsubmit="return CheckEditForm();">
+    <input type="hidden" name="idx" value={{data._id}}>
     <div class="form-group">
-        <label for="name">작성자</label>
-        <input class="form-control" type="text" name="name" value="{{session['name']}}" readonly>
+        <label for="writer">작성자</label>
+        <input type="text" class="form-control" id="name" name="name" disabled value={{session.get('name')}}>
     </div>
     <div class="form-group">
         <label for="title">제목</label>
-        <input class="form-control" type="text" name="title" value={{data.title}}>
+        <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요.." value="{{data.title}}">
     </div>
     <div class="form-group">
         <label for="contents">내용</label>
-        <input class="form-control" type="text" name="name" value="{{session['name']}}" readonly>
+        <textarea class="form-control" rows="8" id="summernote" name="contents" placeholder="내용을 입력하세요..">{{data.contents}}</textarea>
     </div>
+    <input class="btn btn-primary" type="submit" value="수정하기">
+</form>
 
-
-<table>
-    <form method="POST" name="form" action="{{url_for('board.board_edit', idx=data._id)}}">
-
-    <tr>
-        <td>작성자</td>
-        <td><input type="text" name="name" value="{{session['name']}}" readonly></td>
-    </tr>
-    <tr>
-        <td>제목</td>
-        <td><input type="text" name="title" value="{{data.title}}"></td>
-    </tr>
-    <tr>
-        <td>내용</td>
-        <td><textarea name="contents" id="" cols="30" rows="10">{{data.contents}}</textarea></td>
-    </tr>
-    <tr>
-        <td colspan="2"><input type="submit"></td>
-    </tr>
-    </form>
-</table>
 {% endblock %}

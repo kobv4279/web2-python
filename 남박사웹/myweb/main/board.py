@@ -150,9 +150,9 @@ def board_write():
         return render_template("write.html", title="글작성")
 
 
-
-@blueprint.route("/edit/<idx>", methods=["GET","POST"])
-def board_edit(idx):
+@blueprint.route("/edit", methods=["POST"])
+@blueprint.route("/edit/<idx>", methods=["GET"])
+def board_edit(idx=None):
     if request.method == "GET":
         board = mongo.db.board
         data = board.find_one({"_id": ObjectId(idx)})  # objectId형태로 캐스팅해야함
@@ -167,12 +167,16 @@ def board_edit(idx):
                 flash("글 수정 권한이 없습니다")
                 return redirect(url_for("board.lists"))
     else:    # 글작성에서 넘어가는경우 post형태로 받을경우
+        idx = request.form.get("idx")
         title = request.form.get("title")
         contents = request.form.get("contents")
 
 # 권한이 있는지 확인 
         board = mongo.db.board
+
+
         data = board.find_one({"_id": ObjectId(idx)})
+
         if session.get("id") == data.get("writer_id"):
             board.update_one({"_id": ObjectId(idx)}, {    # 업데이트될 내용을 명시
                 "$set":{
